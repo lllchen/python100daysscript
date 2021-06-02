@@ -30,4 +30,4 @@ def primes():
 #    else:
 #        break
 
-print(_not_divisible(2)(1))#这行代码测试了python中的内部函数的形参值如何在调用时传入，只要使用外层函数的函数名再追加一套调用括号即可。
+print(_not_divisible(2)(1))#这行代码测试了python中返回函数的调用，只要使用外层函数的函数名再追加一套调用括号即可。
