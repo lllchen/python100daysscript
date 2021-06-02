@@ -1,13 +1,18 @@
 def countFactor(number):
-    l=[1]
-    i=1
-    while True:
-        if i == l[-1]:
+    l=[1,number]
+    i=2
+    while True:       
+        if i >= l[-1]:
             break
         else:
-            i += 1
             if number%i == 0:
-                l.extend([i,number%i])
+                temp = list(set([i,int(number/i)]))
+                temp.sort()
+                l.extend(temp)
+            i += 1       
+    l.pop(1)
+    print('number',number,':',l)
     return l
 
-result = [filter(lambda x ,,list(range(1,10001)))]
+result = list(filter(lambda x :x == sum(countFactor(x)),list(range(2,10001))))
+print(result)
