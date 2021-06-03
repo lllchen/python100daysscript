@@ -16,3 +16,4 @@ def countFactor(number):
 
 result = list(filter(lambda x :x == sum(countFactor(x)),list(range(2,10001))))
 print(result)
+
