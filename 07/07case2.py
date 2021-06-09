@@ -28,4 +28,4 @@ def luckyChristians(n:int,cycle:int,pickup:int):
                     j+=1
     return peoples
 if __name__ =='__main__':
-    print(luckyChristians(30,9,15))
+    print(luckyChristians(30,9,15)) 
