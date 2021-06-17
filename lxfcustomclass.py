@@ -59,8 +59,18 @@ class BDcustomclass(object):
     
     def __next__(self):
         self.__fib_a ,self.__fib_b = self.__fib_b,self.__fib_a+self.__fib_b
-        if self.__fib_a>99999:
+        if self.__fib_a>20:
             raise StopIteration()
+        return self.__fib_a
+    
+    def __getitem__(self,n):
+        if isinstance(n,int):
+            self.__fib_a,self.__fib_b=0,1
+            for i in range(n+1):
+                self.__fib_a,self.__fib_b = self.__fib_b,self.__fib_a+self.__fib_b
+        if isinstance(n,slice):
+            pass
+        
         return self.__fib_a
 
     pass
@@ -69,8 +79,10 @@ class BDcustomclass(object):
 def main():
     lc = BDcustomclass('lc','man','19921231','天津')
     print(lc)
-    for i in lc:
-        print(i)
-
+    #for i in lc:
+    #    print(i)
+    for i in range(5):
+        print(lc[i])
+    
 if __name__ == '__main__':
     main()
