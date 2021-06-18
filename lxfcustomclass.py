@@ -21,30 +21,54 @@ __author__='BrilliantDawn'
 另一种是配合__next__()方法，不断返回下一个。
 6.__getitem__()方法能实现根据下标[i]取元素，也能实现切片操作。
 7.__getattr__()方法能动态返回属性。
-8.__call__方法可以实现对类实例的调用。
+8.__call__方法可以实现对类实例的调用。函数和我们上面定义的带有__call__()的类实例都是callable对象。
 
 '''
 import time
 
 
 class BDcustomclass(object):
-    __slots__ = ('__name','__sex','__birthday','__age','__address','__fib_a','__fib_b','_path')
+    __slots__ = ('__name','__sex','__birthday','__age','__address','__path','__fib_a','__fib_b')
 
-    def __init__(self,name,sex,birthday,address,fib_a=0,fib_b=1,path=''):
+    def __init__(self,name,sex,birthday,address,path='',fib_a=0,fib_b=1):#参数定义的顺序必须是：必选参数、默认参数、可变参数、命名关键字参数和关键字参数。
         self.__name = name
         self.__sex = sex 
         self.__birthday = birthday
         self.__age = time.localtime(time.time()).tm_year - int(birthday[0:4]) if time.localtime(time.time()).tm_mon > int(birthday[4:6]) else time.localtime(time.time()).tm_year - int(birthday[0:4])-1
         self.__address =address
+        self.__path = path
         self.__fib_a = fib_a
         self.__fib_b = fib_b
-        self._path = path
+        
+    @property
+    def name(self):
+        return self.__name
     
+    @name.setter
+    def name(self,name):
+        self.__name = name
+    
+    @property
+    def sex(self):
+        return self.__sex
+    
+    @sex.setter
+    def sex(self,sex):
+        self.__sex = sex
+
+    @property
+    def path(self):
+        return self.__path
+    
+    @path.setter
+    def path(self,path):
+        self.__path = path
+
     def __len__(self):
         return len(self.__name+self.__sex+self.__birthday+self.__age+self.__address)
   
     def __str__(self) -> str:
-        return '名字：%s，性别：%s，生日：%s，年龄：%d，户籍：%s' % (self.__name,self.__sex,self.__birthday,self.__age,self.__address)
+        return '名字：%s，性别：%s，生日：%s，年龄：%d，户籍：%s，path：%s' % (self.__name,self.__sex,self.__birthday,self.__age,self.__address,self.__path)
     
     __repr__ = __str__
 
@@ -80,11 +104,18 @@ class BDcustomclass(object):
             return sliceresult
 
     def __getattr__(self, path):
-        return BDcustomclass('%s/%s' % (self._path, path))
+        if path=='path':#这里的动态属性可以不受__slots__的限制
+            return '胜利大街'
+        #return BDcustomclass('zl','woman','19910315','tj','%s/%s' % (self.__path, path))#这是廖雪峰写的，感觉这样每次都创建一个新对象太浪费资源了，就改为下面这样。
+        self.__path = '%s/%s' % (self.__path,path)
+        return self
 
+    def __call__(self):
+        return 'My name is %s' % self.__name
     
 def main():
     lc = BDcustomclass('lc','man','19921231','天津')
+    lc.sex = 'male'
     print(lc)
     l=[]
     #for i in lc:#for循环对应__next__()函数使用
@@ -93,7 +124,9 @@ def main():
         l.append(lc[i])#取下标对应__getitem__()函数使用，但它和__next__()都需要__iter__()返回一个self作为支持
     print(l)
     print(l[:20:3])#切片同取下标
-    lc.status.user.timeline.list
+    print(lc.status.user.timeline.list)
+    print(lc.path)#因为定义了path的setter，所以不再显示‘胜利大街’
+    print(lc())
     
 if __name__ == '__main__':
     main()
