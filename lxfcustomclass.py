@@ -28,9 +28,9 @@ import time
 
 
 class BDcustomclass(object):
-    __slots__ = ('__name','__sex','__birthday','__age','__address','__fib_a','__fib_b')
+    __slots__ = ('__name','__sex','__birthday','__age','__address','__fib_a','__fib_b','_path')
 
-    def __init__(self,name,sex,birthday,address,fib_a=0,fib_b=1):
+    def __init__(self,name,sex,birthday,address,fib_a=0,fib_b=1,path=''):
         self.__name = name
         self.__sex = sex 
         self.__birthday = birthday
@@ -38,6 +38,7 @@ class BDcustomclass(object):
         self.__address =address
         self.__fib_a = fib_a
         self.__fib_b = fib_b
+        self._path = path
     
     def __len__(self):
         return len(self.__name+self.__sex+self.__birthday+self.__age+self.__address)
@@ -59,30 +60,40 @@ class BDcustomclass(object):
     
     def __next__(self):
         self.__fib_a ,self.__fib_b = self.__fib_b,self.__fib_a+self.__fib_b
-        if self.__fib_a>20:
-            raise StopIteration()
-        return self.__fib_a
+        yield self.__fib_a
     
     def __getitem__(self,n):
         if isinstance(n,int):
             self.__fib_a,self.__fib_b=0,1
             for i in range(n+1):
                 self.__fib_a,self.__fib_b = self.__fib_b,self.__fib_a+self.__fib_b
-        if isinstance(n,slice):
-            pass
-        
-        return self.__fib_a
+            return self.__fib_a
+        if isinstance(n,slice):#未对负数进行处理
+            self.__fib_a,self.__fib_b=0,1
+            sliceresult=[]
+            for i in range(n.start):#先算出要切片的第一个值的前一个值
+                self.__fib_a,self.__fib_b = self.__fib_b,self.__fib_a+self.__fib_b
+            for i in range(n.start,n.stop,n.step):#再依次从start开始append到list。
+                for j in range(n.step):#考虑到如果切片的step，使用嵌套循环把不需要的运算跳过去
+                    self.__fib_a,self.__fib_b = self.__fib_b,self.__fib_a+self.__fib_b
+                sliceresult.append(self.__fib_a)
+            return sliceresult
 
-    pass
+    def __getattr__(self, path):
+        return BDcustomclass('%s/%s' % (self._path, path))
 
-
+    
 def main():
     lc = BDcustomclass('lc','man','19921231','天津')
     print(lc)
-    #for i in lc:
+    l=[]
+    #for i in lc:#for循环对应__next__()函数使用
     #    print(i)
-    for i in range(5):
-        print(lc[i])
+    for i in range(20):
+        l.append(lc[i])#取下标对应__getitem__()函数使用，但它和__next__()都需要__iter__()返回一个self作为支持
+    print(l)
+    print(l[:20:3])#切片同取下标
+    lc.status.user.timeline.list
     
 if __name__ == '__main__':
     main()
