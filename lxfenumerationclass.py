@@ -63,9 +63,28 @@ print('type(Weekday.Sun):',type(Weekday.Sun))
 
 print('test.__members__:',test.__members__)
 
+@unique
+class Gender(Enum):
+    Female = 0
+    Male = 1
 
+class Student(object):
+    def __init__(self,name,gender):
+        self.__name = name
+        self.__gender = gender
+    @property
+    def gender(self):
+        return self.__gender
+    def __str__(self):
+        return self.__name+str(self.__gender)
+    
+    __repr__ = __str__
 
-
-
-
-
+if __name__ == '__main__':
+    bd = Student('BrilliantDawn',Gender.Male.value)
+    print(bd)
+    bart = Student('Bart', Gender.Male)
+    if bart.gender == Gender.Male:#其实，枚举类的成员就是值，不一定非得盯着value=1看
+        print('测试通过!')
+    else:
+        print('测试失败!')
