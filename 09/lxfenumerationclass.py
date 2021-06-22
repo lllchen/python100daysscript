@@ -17,7 +17,7 @@ Month是一个枚举对象
 
 __auther__ = 'BrilliantDawn'
 
-from enum import Enum,unique
+from enum import Enum,EnumMeta,unique
 from types import MappingProxyType#不可变的映射类型，可将普通的dict集合变为元素值不能变得集合，详见d_view。Enum的成员集合就是这个类型。
 
 Month = Enum('Month999',('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'))#ed2
@@ -49,6 +49,8 @@ print('Month.__members__:',Month.__members__)
 print('type(Month.__members__):',type(Month.__members__))
 print('Month.__members__[\'Jan\']:',Month.__members__['Jan'])
 print('type(Month.__members__[\'Jan\']',type(Month.__members__['Jan']))
+print('type(Month.__members__[\'Jan\'].value',type(Month.__members__['Jan'].value))
+print('type(Month):',type(Month))
 #print(Month999.Jan)#ed1
 
 print('d:',d)
@@ -62,6 +64,10 @@ print('Weekday.Sun:',Weekday.Sun)
 print('type(Weekday.Sun):',type(Weekday.Sun))
 
 print('test.__members__:',test.__members__)
+print('type(test):',type(test))
+
+print('type(Enum):',type(Enum))
+print('type(EnumMeta):',type(EnumMeta))
 
 @unique
 class Gender(Enum):
